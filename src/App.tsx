@@ -48,7 +48,7 @@ function App() {
                 spawnPos={[26, 0, 9]}
               />
 
-              <Minimap />
+              <Minimap url={mapURL} scale={1} margin={[10, 10]} />
             </React.Suspense>
           </group>
           <Stats />

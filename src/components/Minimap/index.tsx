@@ -1,13 +1,9 @@
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Hud, OrthographicCamera as OrthographicCameraDrei } from "@react-three/drei";
-import { useLoader, useThree } from "@react-three/fiber";
-import { GLTFLoader } from "three-stdlib/loaders/GLTFLoader";
-// @ts-ignore
-import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils";
-import { Euler, Group, MathUtils, Mesh, Vector3, Box3 } from "three";
-import { attachDRACOLoader } from "@/src/helpers/attachDRACOLoader.ts";
+import { useThree } from "@react-three/fiber";
+import { Group, Vector3, Box3 } from "three";
 import { cameraProps } from "@/src/helpers/utils.ts";
-import { useStore } from "@/src/store.ts";
+import Map from "@/src/components/Minimap/Map";
 
 type Props = {
   renderPriority?: number,
@@ -21,7 +17,9 @@ type Props = {
     | "center-left"
     | "center-center"
     | "top-center"
-  margin?: [number, number]
+  margin?: [number, number],
+  scale?: number,
+  url: string
 };
 
 const Minimap = (props: Props) => {
@@ -29,6 +27,8 @@ const Minimap = (props: Props) => {
     renderPriority,
     alignment = "bottom-left",
     margin = [10, 10],
+    url,
+    scale
   } = props;
 
   const size = useThree((state) => state.size);
@@ -76,51 +76,15 @@ const Minimap = (props: Props) => {
           near={cameraProps.near}
           far={cameraProps.far}
         />
+        {/*<OrbitControls />*/}
         <group ref={ref} position={[x, y, 0]}>
           <Suspense fallback={null}>
-            <Map />
+            <Map scale={scale} url={url}/>
           </Suspense>
           <ambientLight intensity={2} />
         </group>
       </group>
     </Hud>
-  );
-};
-
-const minimapUrl = "https://u.vrgmetri.com/gb-sms-dev/media/2022-12/gmetri/2632a7cd-799a-4d66-b94c-fe12567a7fb5/o/city_map_compressed_2.glb";
-const rad90 = MathUtils.degToRad(90);
-
-const Map = () => {
-  const gltf = useLoader(GLTFLoader, minimapUrl, (loader) => {
-    const gltfLoader = loader as unknown as GLTFLoader;
-    attachDRACOLoader(gltfLoader);
-  });
-
-  const ref = useRef<Group>(null!);
-  const ball = useRef<Mesh>(null!);
-  const gltfScene = useMemo(() => SkeletonUtils.clone(gltf.scene), [gltf]);
-
-  const euler = new Euler(rad90, 0, 0, "XYZ");
-
-  useEffect(() => useStore.subscribe(
-    s => s.playerPosition,
-    (playerPosition) => {
-      ball.current?.position.copy(playerPosition);
-    }
-  ), [])
-
-  return (
-    <group rotation={euler}>
-      <mesh ref={ball} scale={3}>
-        <sphereGeometry args={[1, 32, 32, 0, 2 * Math.PI, 0, Math.PI]} />
-        <meshBasicMaterial color={"red"} />
-      </mesh>
-      <primitive
-        name={"minimap"}
-        object={gltfScene}
-        ref={ref}
-      />
-    </group>
   );
 };
 
