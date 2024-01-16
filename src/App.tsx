@@ -5,10 +5,12 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stats } from "@react-three/drei";
 import { ACESFilmicToneMapping, SRGBColorSpace, Vector3 } from "three";
 import Terrain from "@/src/components/Terrain";
-import Minimap from "@/src/components/Minimap";
+// import Minimap from "@/src/components/Minimap";
 import { cameraProps } from "@/src/helpers/utils.ts";
 import { ResizeObserver } from "@juggle/resize-observer";
+import DynamicMinimap from "@/src/components/DynamicMinimap";
 
+// const mapURL = "https://u.vrgmetri.com/gb-sms-dev/media/2022-12/gmetri/68bc911d-0903-40c2-9ff6-eb67a521e14d/o/wip_-_interior_environment_farm_house_centered.glb";
 const mapURL = "https://u.vrgmetri.com/gb-sms-dev/media/2022-12/gmetri/2632a7cd-799a-4d66-b94c-fe12567a7fb5/o/city_map_compressed_2.glb";
 
 function App() {
@@ -48,7 +50,8 @@ function App() {
                 spawnPos={[26, 0, 9]}
               />
 
-              <Minimap url={mapURL} scale={1} margin={[10, 10]} />
+              <DynamicMinimap margin={[200, 200]} />
+              {/*<Minimap url={mapURL} scale={0.05} margin={[10, 10]} />*/}
             </React.Suspense>
           </group>
           <Stats />

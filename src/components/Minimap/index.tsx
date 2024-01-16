@@ -52,6 +52,8 @@ const Minimap = (props: Props) => {
     const box3 = new Box3().setFromObject(ref.current);
     box3.getSize(size);
 
+    console.log({ size });
+
     const [xt, yt] = (() => {
       switch(alignment) {
         case "bottom-center": return [x, y + size.y / 2, 0];

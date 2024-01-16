@@ -5,7 +5,7 @@ import { ThreeEvent } from "@react-three/fiber/dist/declarations/src/core/events
 import { useFrame, useThree } from "@react-three/fiber";
 import Cursor from "../Cursor";
 import { SpringRef } from "@react-spring/core";
-import { useStore } from "@/src/store.ts";
+import { useStore } from "@/src/components/Minimap/store.ts";
 
 const debug = true;
 
@@ -305,7 +305,8 @@ const NavMesh = (props: Props) => {
       <mesh geometry={navmeshMesh.current?.geometry}>
         <meshBasicMaterial
           color={"white"}
-          opacity={debug? 1: 0}
+          // opacity={debug? 1: 0}
+          opacity={0}
           transparent={true}
           side={DoubleSide}
           wireframe={true}

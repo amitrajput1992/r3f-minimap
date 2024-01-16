@@ -5,13 +5,15 @@ import { attachDRACOLoader } from "@/src/helpers/attachDRACOLoader.ts";
 import { Box3, BoxGeometry, Euler, Group, MathUtils, Mesh, Vector2, Vector3 } from "three";
 // @ts-ignore
 import * as SkeletonUtils from "three/examples/jsm/utils/SkeletonUtils";
-import { useStore } from "@/src/store.ts";
+import { useStore } from "@/src/components/Minimap/store.ts";
 import { ThreeEvent } from "@react-three/fiber/dist/declarations/src/core/events";
 
 const rad90 = MathUtils.degToRad(90);
 const rotation = [rad90, 0, 0];
 const pointer = new Vector2();
 let pointerDown = false;
+
+const scaleMultiplier = 20;
 
 const Map = ({ enableRotate, scale = 1, url }: { enableRotate?: boolean, scale?: number, url: string }) => {
   const gltf = useLoader(GLTFLoader, url, (loader) => {
@@ -109,6 +111,7 @@ const Map = ({ enableRotate, scale = 1, url }: { enableRotate?: boolean, scale?:
         name={"minimap"}
         object={gltfScene}
         ref={ref}
+        scale={scaleMultiplier}
       />
     </group>
   );
